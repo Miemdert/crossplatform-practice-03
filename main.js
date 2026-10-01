@@ -7,6 +7,7 @@ function createWindow() {
   });
   win.loadFile('index.html');
 }
+
 app.whenReady().then(() => {
   createWindow();
   app.on('activate', () => {
@@ -27,6 +28,17 @@ ipcMain.handle('list-dir', async (event, dir) => {
     name: file.name,
     isDirectory: file.isDirectory()
 }));
-
 return result;
+});
+
+ipcMain.handle('get-OS-data', async(event) => {
+  const os = require('os');
+  const osData = new Map([
+    ["platform",os.platform()],
+    ["arch",os.arch()],
+    ["cpus", os.cpus()],
+    ["totalmem",os.totalmem()]
+  ]
+  );
+  return osData;
 });
